@@ -160,6 +160,9 @@ model = nn.Sequential(
 # %%
 model(torch.randn(3, 3, 32, 32))
 
+# %% [markdown]
+# ## Train the model
+
 # %%
 loss_fn = torch.nn.CrossEntropyLoss()
 opt = torch.optim.Adam(model.parameters(), lr=LEARNING_RATE)
@@ -187,7 +190,7 @@ def train_loop():
 loss_history = []
 
 # %%
-epochs = 101
+epochs = 5
 for epoch in range(epochs):
     loss = train_loop()
     loss_history.append(loss)
@@ -197,6 +200,9 @@ for epoch in range(epochs):
 # %%
 plt.plot(loss_history)
 plt.show()
+
+# %% [markdown]
+# ## Evaluate the model
 
 
 # %%
@@ -212,3 +218,39 @@ def accuracy(dataloader):
 
 
 accuracy(train_dl), accuracy(test_dl)
+
+
+# %%
+def my_confusion_matrix(dataloader, classes):
+    cm = np.zeros((classes, classes))
+    with torch.no_grad():
+        for X, y in dataloader:
+            X = X.to(device)
+            y_pred = model(X).argmax(dim=1).cpu()
+            cm += confusion_matrix(y, y_pred, labels=list(range(classes)))
+    return cm
+
+
+# %%
+cm = my_confusion_matrix(test_dl, len(sign_names))
+fig, ax = plt.subplots(1, 1)
+ax.imshow(cm, cmap="gray_r")
+
+ax.set_xticks(list(range(len(sign_names))))
+ax.set_xticklabels(sign_names, rotation=90)
+ax.set_yticks(list(range(10)))
+ax.set_yticklabels(sign_names)
+
+plt.show()
+
+# %% [markdown]
+# ## Save the model
+
+# %%
+torch.save(
+    {
+        "model_state_dict": model.state_dict(),
+        "opt_state_dict": opt.state_dict(),
+    },
+    "my-checkpoint.pkl",
+)
