@@ -1,0 +1,32 @@
+[tool.poetry]
+name = "road-signs-cnn"
+version = "0.1.0"
+description = ""
+authors = ["davkk <dadulerk@gmail.com>"]
+readme = "README.md"
+
+[tool.poetry.scripts]
+run = "road_signs_cnn.main:main"
+
+[tool.poetry.dependencies]
+python = "^3.11"
+torch = {version = "^2.1.2+cpu", source = "pytorch-cpu"}
+torchvision = {version = "^0.16.2+cpu", source = "pytorch-cpu"}
+torchaudio = {version = "^2.1.2+cpu", source = "pytorch-cpu"}
+matplotlib = "^3.8.2"
+jupytext = "^1.16.0"
+jupyterlab = "^4.0.10"
+notebook = "^7.0.6"
+pandas = "^2.1.4"
+
+[[tool.poetry.source]]
+name = "pytorch-cpu"
+url = "https://download.pytorch.org/whl/cpu"
+priority = "supplemental"
+
+[tool.jupytext]
+formats = "ipynb,py:percent"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
