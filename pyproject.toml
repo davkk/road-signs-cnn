@@ -5,9 +5,6 @@ description = ""
 authors = ["davkk <dadulerk@gmail.com>"]
 readme = "README.md"
 
-[tool.poetry.scripts]
-run = "road_signs_cnn.main:main"
-
 [tool.poetry.dependencies]
 python = "^3.11"
 torch = {version = "^2.1.2+cpu", source = "pytorch-cpu"}
