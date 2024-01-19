@@ -1,3 +1,5 @@
+import sys
+
 import numpy as np
 import torch
 
@@ -5,33 +7,41 @@ import road_signs_cnn.common as common
 import road_signs_cnn.data as data
 from road_signs_cnn.model import loss_fn, model, optimizer
 
-loss_history = np.zeros(common.EPOCHS)
 
-model.train()
+def main():
+    lr = sys.argv[1] if len(sys.argv) == 2 else common.LEARNING_RATE
 
-for epoch in range(common.EPOCHS):
-    total_loss = 0
+    loss_history = np.zeros(common.EPOCHS)
+    model.train()
 
-    for inputs, labels in data.train_dl:
-        optimizer.zero_grad(set_to_none=True)
+    for epoch in range(1, common.EPOCHS + 1):
+        total_loss = 0
 
-        outputs = model(inputs)
-        loss = loss_fn(outputs, labels)
+        for inputs, labels in data.train_dl:
+            optimizer.zero_grad(set_to_none=True)
 
-        loss.backward()
-        optimizer.step()
-        total_loss += loss.item()
+            outputs = model(inputs)
+            loss = loss_fn(outputs, labels)
 
-    loss_history[epoch] = total_loss
+            loss.backward()
+            optimizer.step()
+            total_loss += loss.item()
 
-    print(epoch + 1, total_loss)
-    if epoch % 3:
-        torch.save(
-            model.state_dict(),
-            common.CHECKPOINTS_ROOT / f"checkpoint_epoch={epoch + 1}.pt",
-        )
+        loss_history[epoch] = total_loss
 
-np.savetxt(
-    common.OUTPUT_ROOT / f"loss_lr={common.LEARNING_RATE}.csv",
-    loss_history,
-)
+        print(epoch, total_loss)
+        if epoch % 3 == 0:
+            torch.save(
+                model.state_dict(),
+                common.CHECKPOINTS_ROOT
+                / f"checkpoint_lr={lr:.0E}_epoch={epoch:02}.pt",
+            )
+
+    np.savetxt(
+        common.OUTPUT_ROOT / f"loss_lr={lr:.0E}.csv",
+        loss_history,
+    )
+
+
+if __name__ == "__main__":
+    main()
