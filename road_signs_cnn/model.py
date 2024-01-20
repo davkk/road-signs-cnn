@@ -1,8 +1,6 @@
-import torch
 import torch.nn as nn
 import torch.nn.functional as F
 
-import road_signs_cnn.common as common
 import road_signs_cnn.data as data
 
 
@@ -46,6 +44,3 @@ model = nn.Sequential(
     nn.ReLU(),
     nn.Linear(in_features=128, out_features=len(data.sign_names)),
 )
-
-loss_fn = torch.nn.CrossEntropyLoss()
-optimizer = torch.optim.Adam(model.parameters(), lr=common.LEARNING_RATE)

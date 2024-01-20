@@ -5,14 +5,17 @@ import torch
 
 import road_signs_cnn.common as common
 import road_signs_cnn.data as data
-from road_signs_cnn.model import loss_fn, model, optimizer
+from road_signs_cnn.model import model
 
 
 def main():
-    lr = sys.argv[1] if len(sys.argv) == 2 else common.LEARNING_RATE
+    lr = float(sys.argv[1]) if len(sys.argv) == 2 else common.LEARNING_RATE
 
     loss_history = np.zeros(common.EPOCHS)
     model.train()
+
+    loss_fn = torch.nn.CrossEntropyLoss()
+    optimizer = torch.optim.Adam(model.parameters(), lr=lr)
 
     for epoch in range(1, common.EPOCHS + 1):
         total_loss = 0
@@ -27,7 +30,7 @@ def main():
             optimizer.step()
             total_loss += loss.item()
 
-        loss_history[epoch] = total_loss
+        loss_history[epoch - 1] = total_loss
 
         print(epoch, total_loss)
         if epoch % 3 == 0:
