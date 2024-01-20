@@ -7,7 +7,8 @@ readme = "README.md"
 
 [tool.poetry.scripts]
 train = "road_signs_cnn.train:main"
-evaluate = "road_signs_cnn.eval:main"
+confmat = "road_signs_cnn.confmat:main"
+accuracy = "road_signs_cnn.accuracy:main"
 
 [tool.poetry.dependencies]
 python = "^3.11"

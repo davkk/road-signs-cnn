@@ -3,7 +3,7 @@ import pickle
 import numpy as np
 import numpy.typing as npt
 from PIL import Image
-from torch.utils.data import DataLoader, Dataset
+from torch.utils.data import DataLoader, Dataset, WeightedRandomSampler
 from torchvision import transforms
 
 import road_signs_cnn.common as common
@@ -56,21 +56,34 @@ train_images, train_labels = load_data("train.p")
 test_images, test_labels = load_data("test.p")
 valid_images, valid_labels = load_data("valid.p")
 
+
+def balance_sampler(target) -> WeightedRandomSampler:
+    _, counts = np.unique(target, return_counts=True)
+
+    weights = 1.0 / counts
+    samples_weights = weights[target]
+
+    return WeightedRandomSampler(
+        weights=samples_weights,
+        num_samples=len(samples_weights),
+    )
+
+
 train_dl = DataLoader(
     RoadSignsDataset(images=train_images, labels=train_labels),
     batch_size=32,
-    shuffle=True,
     num_workers=5,
+    sampler=balance_sampler(train_labels),
 )
 test_dl = DataLoader(
     RoadSignsDataset(images=test_images, labels=test_labels),
     batch_size=2000,
-    shuffle=False,
     num_workers=5,
+    sampler=balance_sampler(test_labels),
 )
 valid_dl = DataLoader(
     RoadSignsDataset(images=valid_images, labels=valid_labels),
     batch_size=2000,
-    shuffle=False,
     num_workers=5,
+    sampler=balance_sampler(valid_labels),
 )

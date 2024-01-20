@@ -14,15 +14,6 @@ model.load_state_dict(torch.load(checkpoint))
 model.eval()
 
 
-def accuracy(dataloader):
-    correct = 0
-    with torch.no_grad():
-        for inputs, labels in dataloader:
-            outputs = model(inputs).argmax(dim=1)
-            correct += (outputs == labels).sum().item()
-    return correct / len(dataloader.dataset)
-
-
 def conf_mat(dataloader):
     n = len(data.sign_names)
     cm = np.zeros((n, n))
@@ -38,7 +29,6 @@ def conf_mat(dataloader):
 
 
 def main():
-    print(checkpoint, accuracy(data.train_dl), accuracy(data.test_dl))
     cm = conf_mat(data.test_dl)
 
     plt.imshow(cm, cmap="gray_r")
