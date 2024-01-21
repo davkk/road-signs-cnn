@@ -1,3 +1,4 @@
+import argparse
 import sys
 
 import numpy as np
@@ -5,11 +6,31 @@ import torch
 
 import road_signs_cnn.common as common
 import road_signs_cnn.data as data
-from road_signs_cnn.model import model
+from road_signs_cnn.model import cnn
+
+parser = argparse.ArgumentParser()
+parser.add_argument(
+    "--lr",
+    metavar="float",
+    type=float,
+    required=True,
+    help="learning rate",
+)
+parser.add_argument(
+    "--dropout",
+    metavar="float",
+    type=float,
+    required=True,
+    help="dropout",
+)
+args = parser.parse_args()
 
 
 def main():
-    lr = float(sys.argv[1]) if len(sys.argv) == 2 else common.LEARNING_RATE
+    lr: float = args.lr or common.LEARNING_RATE
+    dropout: float = args.dropout or common.LEARNING_RATE
+
+    model = cnn(dropout=dropout)
 
     loss_history = np.zeros(common.EPOCHS)
     model.train()
@@ -37,11 +58,11 @@ def main():
             torch.save(
                 model.state_dict(),
                 common.CHECKPOINTS_ROOT
-                / f"checkpoint_lr={lr:.0E}_epoch={epoch:02}.pt",
+                / f"checkpoint_{lr=:.0E}_{dropout=:.1f}_{epoch=:02}.pt",
             )
 
     np.savetxt(
-        common.OUTPUT_ROOT / f"loss_lr={lr:.0E}.csv",
+        common.OUTPUT_ROOT / f"loss_{lr=:.0E}_{dropout=:.2f}.csv",
         loss_history,
     )
 

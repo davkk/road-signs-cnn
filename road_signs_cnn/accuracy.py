@@ -1,12 +1,32 @@
-import sys
+import argparse
+import re
 from pathlib import Path
 
 import torch
 
+import road_signs_cnn.common as common
 import road_signs_cnn.data as data
-from road_signs_cnn.model import model
+from road_signs_cnn.model import cnn
 
-checkpoint = sys.argv[1]
+parser = argparse.ArgumentParser()
+parser.add_argument(
+    "checkpoint",
+    metavar="string",
+    type=Path,
+    help="checkpoint path",
+)
+args = parser.parse_args()
+
+checkpoint = str(args.checkpoint)
+
+match_dropout = re.search("dropout=([0-9]+[.][0-9]+)", checkpoint)
+dropout = (
+    float(match_dropout.group(1))
+    if match_dropout is not None
+    else common.DROPOUT
+)
+
+model = cnn(dropout=dropout)
 
 model.load_state_dict(torch.load(checkpoint))
 model.eval()

@@ -23,19 +23,17 @@ for idx, (lr, values) in enumerate(data.items()):
     trainplot = plt.plot(
         epoch,
         [train * 100 for train in train],
-        "-" + markers[idx % len(markers)],
-        markersize=12,
-        mew=3,
+        "--",
         label=f"{lr:.0E} train",
+        lw=2,
     )
     plt.plot(
         epoch,
         [test * 100 for test in test],
-        "--" + markers[idx % len(markers)],
-        markersize=12,
-        mew=3,
+        "-",
         label=f"{lr:.0E} test",
-        c=f"{trainplot[0].get_color()}dd",
+        c=f"{trainplot[0].get_color()}",
+        lw=2,
     )
 
 plt.xlabel("Epoch")

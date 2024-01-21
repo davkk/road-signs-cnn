@@ -8,7 +8,8 @@ DATA_ROOT = Path("data")
 CHECKPOINTS_ROOT = Path("checkpoints")
 
 EPOCHS = 15
-LEARNING_RATE = 1e-4
+LEARNING_RATE = 1e-3
+DROPOUT = 0.2
 
 
 torch.manual_seed(2001)
