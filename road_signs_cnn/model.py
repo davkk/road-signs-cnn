@@ -40,7 +40,7 @@ def cnn(dropout=common.DROPOUT):
         #
         nn.Flatten(),
         nn.Dropout(dropout),
-        nn.Linear(in_features=32 * 4 * 4, out_features=128),
+        nn.Linear(in_features=512, out_features=128),
         nn.ReLU(),
         nn.Linear(in_features=128, out_features=len(data.sign_names)),
     )

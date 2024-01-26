@@ -22,7 +22,7 @@ style: |
 # 🚗 🛑
 # Klasyfikacja znaków drogowych
 
-Dawid Karpiński, 24.01.2024 r.
+Dawid Karpiński, 26.01.2024 r.
 
 ---
 
@@ -30,7 +30,12 @@ Dawid Karpiński, 24.01.2024 r.
 
 ---
 
-[German Traffic Sign Dataset](https://www.kaggle.com/datasets/harbhajansingh21/german-traffic-sign-dataset)
+<style scoped>
+h6 { font-size: 0.5em; margin-top: 0 !important }
+</style>
+
+## German Traffic Sign Dataset
+[kaggle.com/datasets/harbhajansingh21/german-traffic-sign-dataset]()
 
 - **43** unikalnych rodzajów znaków
 - **34799** zdjęć do trenowania
@@ -83,7 +88,7 @@ model = nn.Sequential(
     nn.Flatten(),
     nn.Dropout(dropout),
     #
-    nn.Linear(32 * 4 * 4, 128),
+    nn.Linear(512, 128),
     nn.ReLU(),
     nn.Linear(128, len(number_of_classes)),
 )
@@ -116,6 +121,48 @@ model = nn.Sequential(
 ---
 
 ![bg contain](./figures/accuracy_lr_epoch.png)
+
+---
+
+## 3.2. Confusion matrix
+
+LR = 1e-03
+dropout = 0.2
+
+---
+
+![bg contain](./figures/confmat_epoch=03.png)
+
+---
+
+![bg contain](./figures/confmat_epoch=06.png)
+
+---
+
+![bg contain](./figures/confmat_epoch=09.png)
+
+---
+
+![bg contain](./figures/confmat_epoch=12.png)
+
+---
+
+![bg contain](./figures/confmat_epoch=15.png)
+
+---
+
+## 3.4. Confusion matrix
+
+LR = 1e-04
+dropout = 0.2
+
+---
+
+![bg contain](./figures/confmat_lr=1E-04_epoch=03.png)
+
+---
+
+![bg contain](./figures/confmat_lr=1E-04_epoch=15.png)
 
 ---
 
